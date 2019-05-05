@@ -4,21 +4,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pokidin.a.notekeeper.R;
+import com.pokidin.a.notekeeper.entity.Note;
+import com.pokidin.a.notekeeper.repo.NoteRepository;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private List<Note> mAllNotes;
+    private NoteRepository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRepository = new NoteRepository(getApplication());
+        mAllNotes = mRepository.getAllNotes();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        RecyclerView recyclerView = findViewById(R.id.rv_list);
+        NoteListAdapter adapter = new NoteListAdapter(mAllNotes);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,4 +69,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginTop="4dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="10/05/2019 10:12" />
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="100"
+        android:text="Bxjhdbrvdj jhbc bvc bhvj bxlv jhx vhxbv hkxbvhj, b hb jvhb bht b xbxh$$$$ bjhvb jhhvjhxv hxjv jhxb jhb jhbhj????? Bjhx bvhjb vjhbhb hjvb ,vbk wuiirueshxvxduhvuri vfxvhxdr e!!!!!" />
+</LinearLayout>
