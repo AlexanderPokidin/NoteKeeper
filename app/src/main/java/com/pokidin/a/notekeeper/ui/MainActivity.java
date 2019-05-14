@@ -3,6 +3,7 @@ package com.pokidin.a.notekeeper.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,36 +15,32 @@ import android.view.MenuItem;
 import com.pokidin.a.notekeeper.R;
 import com.pokidin.a.notekeeper.entity.Note;
 import com.pokidin.a.notekeeper.repo.NoteRepository;
+import com.pokidin.a.notekeeper.viewmodel.NoteViewModel;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private List<Note> mAllNotes;
-    private NoteRepository mRepository;
+    private NoteViewModel mNoteViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mRepository = new NoteRepository(getApplication());
-        mAllNotes = mRepository.getAllNotes();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = findViewById(R.id.rv_list);
-        NoteListAdapter adapter = new NoteListAdapter(mAllNotes);
+        final NoteListAdapter adapter = new NoteListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NoteDetailsActivity.class);
-                startActivity(intent);
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
     }
@@ -69,5 +66,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

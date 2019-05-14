@@ -37,8 +37,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
     }
 
     private void saveNewNote(String string) {
-        Note note = new Note(string);
+        Note note = new Note(string, "date");
         mRepository.insert(note);
     }
-
 }

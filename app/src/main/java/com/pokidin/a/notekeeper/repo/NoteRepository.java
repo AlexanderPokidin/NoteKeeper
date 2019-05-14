@@ -1,25 +1,45 @@
 package com.pokidin.a.notekeeper.repo;
 
 import android.app.Application;
+import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
 
 import com.pokidin.a.notekeeper.dao.NoteDao;
-import com.pokidin.a.notekeeper.db.NoteDatabase;
+//import com.pokidin.a.notekeeper.db.NoteDatabase;
+import com.pokidin.a.notekeeper.db.NoteRoomDatabase;
 import com.pokidin.a.notekeeper.entity.Note;
 
 import java.util.List;
 
 public class NoteRepository {
-    private NoteDatabase db;
+    private NoteDao mNoteDao;
+    private LiveData<List<Note>> mAllNotes;
 
     public NoteRepository(Application application) {
-        db = NoteDatabase.getInstance(application);
+        NoteRoomDatabase database = NoteRoomDatabase.getInstance(application);
+        mNoteDao = database.getNoteDao();
+        mAllNotes = mNoteDao.getAllNotes();
+    }
+
+    public LiveData<List<Note>> getAllNotes() {
+        return mAllNotes;
     }
 
     public void insert(Note note) {
-        db.insert(note);
+        new InsertAsyncTask(mNoteDao).execute(note);
     }
 
-    public List<Note> getAllNotes() {
-        return db.getAllNotes();
+    private static class InsertAsyncTask extends AsyncTask<Note, Void, Void> {
+        private NoteDao mAsyncNoteDao;
+
+        public InsertAsyncTask(NoteDao dao) {
+            mAsyncNoteDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Note... notes) {
+            mAsyncNoteDao.insert(notes[0]);
+            return null;
+        }
     }
 }

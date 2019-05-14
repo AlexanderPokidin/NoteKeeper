@@ -1,28 +1,50 @@
 package com.pokidin.a.notekeeper.entity;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+@Entity(tableName = "note_table")
 public class Note {
 
-    private String text;
+    @PrimaryKey(autoGenerate = true)
+    private int mId;
 
-    private String date;
+    @NonNull
+    @ColumnInfo(name = "note")
+    private String mText;
 
-    public Note(String text) {
-        this.text = text;
+    @ColumnInfo(name = "date")
+    private String mDate;
+
+    public Note(@NonNull String text, String date) {
+        mText = text;
+        mDate = date;
     }
 
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
+
+    @NonNull
     public String getText() {
-        return text;
+        return mText;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setText(@NonNull String text) {
+        mText = text;
     }
 
     public String getDate() {
-        return date;
+        return mDate;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        mDate = date;
     }
 }
