@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.pokidin.a.notekeeper.R;
 import com.pokidin.a.notekeeper.entity.Note;
@@ -23,6 +24,9 @@ import com.pokidin.a.notekeeper.viewmodel.NoteViewModel;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final int NOTE_ACTIVITY_DETAILS_REQUEST_CODE = 1;
+
     private NoteViewModel mNoteViewModel;
 
     @Override
@@ -31,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         RecyclerView recyclerView = findViewById(R.id.rv_list);
         final NoteListAdapter adapter = new NoteListAdapter(this);
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NoteDetailsActivity.class);
+                startActivityForResult(intent, NOTE_ACTIVITY_DETAILS_REQUEST_CODE);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -78,5 +82,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NOTE_ACTIVITY_DETAILS_REQUEST_CODE && resultCode == RESULT_OK) {
+            Note note = new Note(data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY), "030303");
+            mNoteViewModel.insert(note);
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_SHORT).show();
+        }
     }
 }
