@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.pokidin.a.notekeeper.R;
 import com.pokidin.a.notekeeper.entity.Note;
-import com.pokidin.a.notekeeper.repo.NoteRepository;
 import com.pokidin.a.notekeeper.viewmodel.NoteViewModel;
 
 import java.util.List;
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == NOTE_ACTIVITY_DETAILS_REQUEST_CODE && resultCode == RESULT_OK) {
             Note note = new Note(data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY), "030303");
-            mNoteViewModel.insert(note);
+            mNoteViewModel.insertNote(note);
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_SHORT).show();
         }

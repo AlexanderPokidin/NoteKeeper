@@ -21,7 +21,7 @@ import java.util.List;
 //    }
 //
 //    @Override
-//    public void insert(Note note) {
+//    public void insertNote(Note note) {
 //        allNotes.add(note);
 //    }
 //

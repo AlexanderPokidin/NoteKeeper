@@ -50,8 +50,10 @@ public abstract class NoteRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            for (Note note : notes) {
-                mNoteDao.insert(note);
+            if (mNoteDao.getAnyNote().length < 1) {
+                for (Note note : notes) {
+                    mNoteDao.insertNote(note);
+                }
             }
             return null;
         }

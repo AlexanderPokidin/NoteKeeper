@@ -16,13 +16,16 @@ import java.util.List;
 public interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Note note);
+    void insertNote(Note note);
 
     @Delete
-    void delete(Note note);
+    void deleteNote(Note note);
 
     @Update
     void update(Note note);
+
+    @Query("SELECT * from note_table LIMIT 1")
+    Note[] getAnyNote();
 
     @Query("SELECT * FROM note_table ORDER BY mId DESC")
     LiveData<List<Note>> getAllNotes();
