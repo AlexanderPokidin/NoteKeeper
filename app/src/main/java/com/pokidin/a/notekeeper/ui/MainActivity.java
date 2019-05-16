@@ -25,6 +25,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final int NOTE_ACTIVITY_DETAILS_REQUEST_CODE = 1;
+    public static final int UPDATE_NOTE_ACTIVITY_REQUEST_CODE = 2;
+    public static final String EXTRA_DATA_UPDATE_NOTE = "extra_note_to_be_updated";
+    public static final String EXTRA_DATA_ID = "extra_data_id";
 
     private NoteViewModel mNoteViewModel;
 
@@ -49,14 +52,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        adapter.setOnItemClickListener(new NoteListAdapter.ClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Note note = adapter.getNoteAtPosition(position);
+                launchUpdateNoteActivity(note);
+            }
+        });
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteDetailsActivity.class);
                 startActivityForResult(intent, NOTE_ACTIVITY_DETAILS_REQUEST_CODE);
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
     }
@@ -93,5 +104,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void launchUpdateNoteActivity(Note note) {
+        Intent intent = new Intent(this, NoteDetailsActivity.class);
+        intent.putExtra(EXTRA_DATA_UPDATE_NOTE, note.getText());
+        intent.putExtra(EXTRA_DATA_ID, note.getId());
+        startActivityForResult(intent, UPDATE_NOTE_ACTIVITY_REQUEST_CODE);
     }
 }

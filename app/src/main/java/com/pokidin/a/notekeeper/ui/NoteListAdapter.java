@@ -18,6 +18,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
 
     private List<Note> mNotes;
     private final LayoutInflater mInflater;
+    private static ClickListener sClickListener;
 
     public NoteListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -36,7 +37,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
             Note current = mNotes.get(position);
             holder.textItemView.setText(current.getText());
         } else {
-            holder.textItemView.setText("Blank note");
+            holder.textItemView.setText(R.string.no_word);
         }
     }
 
@@ -54,12 +55,30 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         notifyDataSetChanged();
     }
 
+    public Note getNoteAtPosition(int position) {
+        return mNotes.get(position);
+    }
+
     class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView textItemView;
 
         private NoteViewHolder(View itemView) {
             super(itemView);
             textItemView = itemView.findViewById(R.id.tv_text);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sClickListener.onItemClick(view, getAdapterPosition());
+                }
+            });
         }
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        NoteListAdapter.sClickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(View v, int position);
     }
 }

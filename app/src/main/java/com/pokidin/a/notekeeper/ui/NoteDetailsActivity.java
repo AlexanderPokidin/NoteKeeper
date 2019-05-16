@@ -22,6 +22,16 @@ public class NoteDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_details);
 
         mEditText = findViewById(R.id.et_text);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String text = extras.getString(MainActivity.EXTRA_DATA_UPDATE_NOTE, "");
+            if (!text.isEmpty()) {
+                mEditText.setText(text);
+                mEditText.setSelection(text.length());
+                mEditText.requestFocus();
+            }
+        }
+
         mButton = findViewById(R.id.btn_done);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
