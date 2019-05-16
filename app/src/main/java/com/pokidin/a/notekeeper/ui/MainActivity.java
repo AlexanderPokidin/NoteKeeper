@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteDetailsActivity.class);
                 startActivityForResult(intent, NOTE_ACTIVITY_DETAILS_REQUEST_CODE);
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
     }
@@ -101,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == NOTE_ACTIVITY_DETAILS_REQUEST_CODE && resultCode == RESULT_OK) {
             Note note = new Note(data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY), "030303");
             mNoteViewModel.insertNote(note);
+        } else if (requestCode == UPDATE_NOTE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            String noteText = data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY);
+            int id = data.getIntExtra(NoteDetailsActivity.EXTRA_REPLY_ID, -1);
+            if (id != -1) {
+                mNoteViewModel.updateNote(new Note(id, noteText, "040404"));
+            } else {
+                Toast.makeText(this, R.string.unable_to_update, Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_SHORT).show();
         }

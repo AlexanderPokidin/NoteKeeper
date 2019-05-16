@@ -12,9 +12,11 @@ import com.pokidin.a.notekeeper.R;
 
 public class NoteDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_REPLY = "reply";
+    public static final String EXTRA_REPLY_ID = "reply_id";
 
     private EditText mEditText;
     private Button mButton;
+    private Bundle extras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_details);
 
         mEditText = findViewById(R.id.et_text);
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
         if (extras != null) {
             String text = extras.getString(MainActivity.EXTRA_DATA_UPDATE_NOTE, "");
             if (!text.isEmpty()) {
@@ -54,6 +56,12 @@ public class NoteDetailsActivity extends AppCompatActivity {
         } else {
             String note = mEditText.getText().toString();
             replyIntent.putExtra(EXTRA_REPLY, note);
+            if (extras != null && extras.containsKey(MainActivity.EXTRA_DATA_ID)) {
+                int id = extras.getInt(MainActivity.EXTRA_DATA_ID, -1);
+                if (id != -1) {
+                    replyIntent.putExtra(EXTRA_REPLY_ID, id);
+                }
+            }
             setResult(RESULT_OK, replyIntent);
         }
         finish();

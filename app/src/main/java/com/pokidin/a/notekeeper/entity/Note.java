@@ -2,6 +2,7 @@ package com.pokidin.a.notekeeper.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -19,6 +20,13 @@ public class Note {
     private String mDate;
 
     public Note(@NonNull String text, String date) {
+        mText = text;
+        mDate = date;
+    }
+
+    @Ignore
+    public Note(int id, @NonNull String text, String date) {
+        mId = id;
         mText = text;
         mDate = date;
     }

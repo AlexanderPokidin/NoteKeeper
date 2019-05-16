@@ -8,7 +8,8 @@
     <string name="write_note_here">Come on, write your note here</string>
     <string name="btn_done">Done</string>
     <string name="write_your_note">Let`s write down your note here</string>
-    
+
     <string name="empty_not_saved">Empty not saved</string>
+    <string name="unable_to_update">Unable to update</string>
     <string name="no_word">Blank note</string>
 </resources>
