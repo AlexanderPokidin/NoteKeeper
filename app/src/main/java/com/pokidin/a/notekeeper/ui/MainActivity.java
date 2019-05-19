@@ -106,12 +106,19 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.unable_to_update, Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == UPDATE_NOTE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_FIRST_USER) {
+            int id = data.getIntExtra(NoteDetailsActivity.EXTRA_REPLY_ID, -1);
+            if (id != -1) {
+                mNoteViewModel.deleteNote(id);
+            } else {
+                Toast.makeText(this, R.string.unable_to_delete, Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.no_word, Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void launchUpdateNoteActivity(Note note) {
+    private void launchUpdateNoteActivity(Note note) {
         Intent intent = new Intent(this, NoteDetailsActivity.class);
         intent.putExtra(EXTRA_DATA_UPDATE_NOTE, note.getText());
         intent.putExtra(EXTRA_DATA_ID, note.getId());

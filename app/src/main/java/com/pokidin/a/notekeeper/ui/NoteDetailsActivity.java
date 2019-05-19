@@ -1,8 +1,6 @@
 package com.pokidin.a.notekeeper.ui;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.pokidin.a.notekeeper.R;
-import com.pokidin.a.notekeeper.viewmodel.NoteViewModel;
 
 public class NoteDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_REPLY = "reply";
@@ -23,7 +20,6 @@ public class NoteDetailsActivity extends AppCompatActivity {
     private EditText mEditText;
     private Button mButton;
     private Bundle extras;
-    private NoteViewModel mNoteViewModel;
     private int id;
 
     @Override
@@ -31,7 +27,6 @@ public class NoteDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_details);
 
-        mNoteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
         mEditText = findViewById(R.id.et_text);
         extras = getIntent().getExtras();
         if (extras != null) {
@@ -47,7 +42,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                setExtraReply();
             }
         });
     }
@@ -87,7 +82,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_delete) {
-            removeCurrentNote();
+            setExtraReplyForRemove();
             return true;
         }
         if (id == R.id.action_share) {
@@ -97,9 +92,18 @@ public class NoteDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void removeCurrentNote() {
-        mNoteViewModel.deleteNote(id);
-        onBackPressed();
+    private void setExtraReplyForRemove() {
+        Intent replyIntent = new Intent();
+        if (TextUtils.isEmpty(mEditText.getText())) {
+            setResult(RESULT_CANCELED, replyIntent);
+        } else {
+            id = extras.getInt(MainActivity.EXTRA_DATA_ID, -1);
+            if (id != -1) {
+                replyIntent.putExtra(EXTRA_REPLY_ID, id);
+            }
+        }
+        setResult(RESULT_FIRST_USER, replyIntent);
+        finish();
     }
 
     private void shareNote() {

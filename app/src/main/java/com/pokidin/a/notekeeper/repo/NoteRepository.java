@@ -5,7 +5,6 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.pokidin.a.notekeeper.dao.NoteDao;
-//import com.pokidin.a.notekeeper.db.NoteDatabase;
 import com.pokidin.a.notekeeper.db.NoteRoomDatabase;
 import com.pokidin.a.notekeeper.entity.Note;
 
@@ -29,8 +28,8 @@ public class NoteRepository {
         new InsertNoteAsyncTask(mNoteDao).execute(note);
     }
 
-    public void deleteNote(Note note) {
-        new DeleteNoteAsyncTask(mNoteDao).execute(note);
+    public void deleteNote(int id) {
+        new DeleteNoteAsyncTask(mNoteDao).execute(id);
     }
 
     public void updateNote(Note note) {
@@ -51,7 +50,7 @@ public class NoteRepository {
         }
     }
 
-    private static class DeleteNoteAsyncTask extends AsyncTask<Note, Void, Void> {
+    private static class DeleteNoteAsyncTask extends AsyncTask<Integer, Void, Void> {
         private NoteDao mAsyncTaskDao;
 
         DeleteNoteAsyncTask(NoteDao dao) {
@@ -59,8 +58,8 @@ public class NoteRepository {
         }
 
         @Override
-        protected Void doInBackground(Note... notes) {
-            mAsyncTaskDao.deleteNote(notes[0]);
+        protected Void doInBackground(Integer... integers) {
+            mAsyncTaskDao.deleteNote(integers[0]);
             return null;
         }
     }
