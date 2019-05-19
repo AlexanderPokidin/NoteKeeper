@@ -1,6 +1,8 @@
 package com.pokidin.a.notekeeper.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,8 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.pokidin.a.notekeeper.R;
+import com.pokidin.a.notekeeper.viewmodel.NoteViewModel;
 
 public class NoteDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_REPLY = "reply";
@@ -19,12 +23,15 @@ public class NoteDetailsActivity extends AppCompatActivity {
     private EditText mEditText;
     private Button mButton;
     private Bundle extras;
+    private NoteViewModel mNoteViewModel;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_details);
 
+        mNoteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
         mEditText = findViewById(R.id.et_text);
         extras = getIntent().getExtras();
         if (extras != null) {
@@ -56,10 +63,10 @@ public class NoteDetailsActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(mEditText.getText())) {
             setResult(RESULT_CANCELED, replyIntent);
         } else {
-            String note = mEditText.getText().toString();
-            replyIntent.putExtra(EXTRA_REPLY, note);
+            String text = mEditText.getText().toString();
+            replyIntent.putExtra(EXTRA_REPLY, text);
             if (extras != null && extras.containsKey(MainActivity.EXTRA_DATA_ID)) {
-                int id = extras.getInt(MainActivity.EXTRA_DATA_ID, -1);
+                id = extras.getInt(MainActivity.EXTRA_DATA_ID, -1);
                 if (id != -1) {
                     replyIntent.putExtra(EXTRA_REPLY_ID, id);
                 }
@@ -80,11 +87,30 @@ public class NoteDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_delete) {
+            removeCurrentNote();
             return true;
         }
         if (id == R.id.action_share) {
+            shareNote();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void removeCurrentNote() {
+        mNoteViewModel.deleteNote(id);
+        onBackPressed();
+    }
+
+    private void shareNote() {
+        if (TextUtils.isEmpty(mEditText.getText())) {
+            Toast.makeText(this, R.string.unable_to_share, Toast.LENGTH_SHORT).show();
+        } else {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, mEditText.getText());
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        }
     }
 }
