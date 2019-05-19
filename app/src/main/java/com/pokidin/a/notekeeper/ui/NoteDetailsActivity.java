@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.pokidin.a.notekeeper.R;
 
@@ -19,6 +20,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
     private EditText mEditText;
     private Button mButton;
     private Bundle extras;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                setExtraReply();
             }
         });
     }
@@ -56,10 +58,10 @@ public class NoteDetailsActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(mEditText.getText())) {
             setResult(RESULT_CANCELED, replyIntent);
         } else {
-            String note = mEditText.getText().toString();
-            replyIntent.putExtra(EXTRA_REPLY, note);
+            String text = mEditText.getText().toString();
+            replyIntent.putExtra(EXTRA_REPLY, text);
             if (extras != null && extras.containsKey(MainActivity.EXTRA_DATA_ID)) {
-                int id = extras.getInt(MainActivity.EXTRA_DATA_ID, -1);
+                id = extras.getInt(MainActivity.EXTRA_DATA_ID, -1);
                 if (id != -1) {
                     replyIntent.putExtra(EXTRA_REPLY_ID, id);
                 }
@@ -80,11 +82,39 @@ public class NoteDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_delete) {
+            setExtraReplyForRemove();
             return true;
         }
         if (id == R.id.action_share) {
+            shareNote();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setExtraReplyForRemove() {
+        Intent replyIntent = new Intent();
+        if (TextUtils.isEmpty(mEditText.getText())) {
+            setResult(RESULT_CANCELED, replyIntent);
+        } else {
+            id = extras.getInt(MainActivity.EXTRA_DATA_ID, -1);
+            if (id != -1) {
+                replyIntent.putExtra(EXTRA_REPLY_ID, id);
+            }
+        }
+        setResult(RESULT_FIRST_USER, replyIntent);
+        finish();
+    }
+
+    private void shareNote() {
+        if (TextUtils.isEmpty(mEditText.getText())) {
+            Toast.makeText(this, R.string.unable_to_share, Toast.LENGTH_SHORT).show();
+        } else {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, mEditText.getText());
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        }
     }
 }

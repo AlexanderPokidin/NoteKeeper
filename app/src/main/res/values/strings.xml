@@ -11,6 +11,8 @@
 
     <string name="empty_not_saved">Empty not saved</string>
     <string name="unable_to_update">Unable to update</string>
+    <string name="unable_to_delete">Unable to delete</string>
+    <string name="unable_to_share">Unable to share blank note</string>
     <string name="no_word">Blank note</string>
     <string name="delete_note">Delete the note</string>
     <string name="share_note">Share the note</string>
