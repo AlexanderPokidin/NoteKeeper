@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.pokidin.a.notekeeper.R;
 import com.pokidin.a.notekeeper.entity.Note;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     private final LayoutInflater mInflater;
     private static ClickListener sClickListener;
 
-    public NoteListAdapter(Context context) {
+    NoteListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
@@ -52,8 +54,30 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         }
     }
 
-    private String formatDate(long longDate){
+    private String formatDate(long longDate) {
         return (String) DateFormat.format("hh:mm:ss dd.MM.yy", new Date(longDate));
+    }
+
+    // At the top of the list are the most recently added notes.
+    void sortListByCreate() {
+        Collections.sort(mNotes, new Comparator<Note>() {
+            @Override
+            public int compare(Note n1, Note n2) {
+                return Integer.compare(n2.getId(), n1.getId());
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    // At the top of the list are the last edited notes.
+    void sortListByUpdate() {
+        Collections.sort(mNotes, new Comparator<Note>() {
+            @Override
+            public int compare(Note n1, Note n2) {
+                return Long.compare(n2.getCreateDate(), n1.getCreateDate());
+            }
+        });
+        notifyDataSetChanged();
     }
 
     void setNotes(List<Note> notes) {
@@ -61,7 +85,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         notifyDataSetChanged();
     }
 
-    public Note getNoteAtPosition(int position) {
+    Note getNoteAtPosition(int position) {
         return mNotes.get(position);
     }
 
@@ -82,7 +106,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         }
     }
 
-    public void setOnItemClickListener(ClickListener clickListener) {
+    void setOnItemClickListener(ClickListener clickListener) {
         NoteListAdapter.sClickListener = clickListener;
     }
 

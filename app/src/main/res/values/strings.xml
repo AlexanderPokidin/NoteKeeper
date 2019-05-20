@@ -17,4 +17,6 @@
     <string name="delete_note">Delete the note</string>
     <string name="share_note">Share the note</string>
     <string name="sort_notes">Sort notes</string>
+    <string name="sort_by_create">Sort by create</string>
+    <string name="sort_by_update">Sort by update</string>
 </resources>

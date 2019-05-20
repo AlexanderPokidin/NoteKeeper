@@ -6,10 +6,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity(tableName = "note_table")
@@ -40,13 +37,17 @@ public class Note {
         mCreateDate = getCurrentDate();
     }
 
-//    @Ignore
-//    public Note(int id, @NonNull String text, long updateDate) {
-//        mId = id;
-//        mText = text;
-//        mCreateDate = getCurrentDate();
-//        mUpdateDate = updateDate;
-//    }
+    @Ignore
+    public Note(int id, @NonNull String text, long updateDate) {
+        mId = id;
+        mText = text;
+        mCreateDate = getCurrentDate();
+        mUpdateDate = updateDate;
+    }
+
+    private long getCurrentDate() {
+        return Calendar.getInstance().getTimeInMillis();
+    }
 
     public int getId() {
         return mId;
@@ -100,9 +101,5 @@ public class Note {
     @Override
     public int hashCode() {
         return Objects.hash(mId, mText, mCreateDate, mUpdateDate);
-    }
-
-    private long getCurrentDate() {
-        return Calendar.getInstance().getTimeInMillis();
     }
 }
