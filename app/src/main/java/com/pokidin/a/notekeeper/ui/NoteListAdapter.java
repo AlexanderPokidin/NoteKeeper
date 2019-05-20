@@ -3,15 +3,16 @@ package com.pokidin.a.notekeeper.ui;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.pokidin.a.notekeeper.R;
 import com.pokidin.a.notekeeper.entity.Note;
 
+import java.util.Date;
 import java.util.List;
 
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteViewHolder> {
@@ -35,9 +36,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         if (mNotes != null) {
             Note current = mNotes.get(position);
-            holder.textItemView.setText(current.getText());
+            holder.textTv.setText(current.getText());
+            holder.dateTv.setText(formatDate(current.getCreateDate()));
         } else {
-            holder.textItemView.setText(R.string.no_word);
+            holder.textTv.setText(R.string.no_word);
         }
     }
 
@@ -50,6 +52,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         }
     }
 
+    private String formatDate(long longDate){
+        return (String) DateFormat.format("hh:mm:ss dd.MM.yy", new Date(longDate));
+    }
+
     void setNotes(List<Note> notes) {
         mNotes = notes;
         notifyDataSetChanged();
@@ -60,11 +66,13 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     }
 
     class NoteViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textItemView;
+        private final TextView textTv;
+        private final TextView dateTv;
 
         private NoteViewHolder(View itemView) {
             super(itemView);
-            textItemView = itemView.findViewById(R.id.tv_text);
+            textTv = itemView.findViewById(R.id.tv_text);
+            dateTv = itemView.findViewById(R.id.tv_date);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

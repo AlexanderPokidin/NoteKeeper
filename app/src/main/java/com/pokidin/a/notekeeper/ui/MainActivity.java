@@ -96,13 +96,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NOTE_ACTIVITY_DETAILS_REQUEST_CODE && resultCode == RESULT_OK) {
-            Note note = new Note(data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY), "030303");
+            Note note = new Note(data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY));
             mNoteViewModel.insertNote(note);
         } else if (requestCode == UPDATE_NOTE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             String noteText = data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY);
             int id = data.getIntExtra(NoteDetailsActivity.EXTRA_REPLY_ID, -1);
             if (id != -1) {
-                mNoteViewModel.updateNote(new Note(id, noteText, "040404"));
+                mNoteViewModel.updateNote(new Note(id, noteText));
             } else {
                 Toast.makeText(this, R.string.unable_to_update, Toast.LENGTH_SHORT).show();
             }

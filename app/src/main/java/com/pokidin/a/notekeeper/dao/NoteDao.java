@@ -26,6 +26,6 @@ public interface NoteDao {
     @Query("SELECT * from note_table LIMIT 1")
     Note[] getAnyNote();
 
-    @Query("SELECT * FROM note_table ORDER BY mId DESC")
+    @Query("SELECT * FROM note_table ORDER BY create_date DESC")
     LiveData<List<Note>> getAllNotes();
 }

@@ -6,6 +6,12 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
+
 @Entity(tableName = "note_table")
 public class Note {
 
@@ -16,20 +22,31 @@ public class Note {
     @ColumnInfo(name = "note")
     private String mText;
 
-    @ColumnInfo(name = "date")
-    private String mDate;
+    @ColumnInfo(name = "create_date")
+    private long mCreateDate;
 
-    public Note(@NonNull String text, String date) {
+    @ColumnInfo(name = "update_date")
+    private long mUpdateDate;
+
+    public Note(@NonNull String text) {
         mText = text;
-        mDate = date;
+        mCreateDate = getCurrentDate();
     }
 
     @Ignore
-    public Note(int id, @NonNull String text, String date) {
+    public Note(int id, @NonNull String text) {
         mId = id;
         mText = text;
-        mDate = date;
+        mCreateDate = getCurrentDate();
     }
+
+//    @Ignore
+//    public Note(int id, @NonNull String text, long updateDate) {
+//        mId = id;
+//        mText = text;
+//        mCreateDate = getCurrentDate();
+//        mUpdateDate = updateDate;
+//    }
 
     public int getId() {
         return mId;
@@ -48,11 +65,44 @@ public class Note {
         mText = text;
     }
 
-    public String getDate() {
-        return mDate;
+    public long getCreateDate() {
+        return mCreateDate;
     }
 
-    public void setDate(String date) {
-        mDate = date;
+    public void setCreateDate(long createDate) {
+        mCreateDate = createDate;
+    }
+
+    public long getUpdateDate() {
+        return mUpdateDate;
+    }
+
+    public void setUpdateDate(long updateDate) {
+        mUpdateDate = updateDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Note)) {
+            return false;
+        }
+        Note note = (Note) obj;
+        return mId == note.getId()
+                && mCreateDate == note.getCreateDate()
+                && mUpdateDate == note.getUpdateDate()
+                && Objects.equals(mText, note.getText());
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mId, mText, mCreateDate, mUpdateDate);
+    }
+
+    private long getCurrentDate() {
+        return Calendar.getInstance().getTimeInMillis();
     }
 }
