@@ -75,7 +75,6 @@ public class Note {
         return mId == note.getId()
                 && mDate == note.getDate()
                 && Objects.equals(mText, note.getText());
-
     }
 
     @Override
