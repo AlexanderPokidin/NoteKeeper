@@ -18,7 +18,6 @@ public class NoteDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_REPLY_ID = "reply_id";
 
     private EditText mEditText;
-    private Button mButton;
     private Bundle extras;
     private int id;
 
@@ -38,8 +37,8 @@ public class NoteDetailsActivity extends AppCompatActivity {
             }
         }
 
-        mButton = findViewById(R.id.btn_done);
-        mButton.setOnClickListener(new View.OnClickListener() {
+        Button button = findViewById(R.id.btn_done);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setExtraReply();

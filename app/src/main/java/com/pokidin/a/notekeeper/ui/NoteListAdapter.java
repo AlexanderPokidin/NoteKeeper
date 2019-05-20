@@ -7,11 +7,13 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import com.pokidin.a.notekeeper.R;
 import com.pokidin.a.notekeeper.entity.Note;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -19,6 +21,7 @@ import java.util.List;
 
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteViewHolder> {
 
+    private static final String DATE_PATTERN = "HH:mm:ss dd.MM.yy";
     private List<Note> mNotes;
     private final LayoutInflater mInflater;
     private static ClickListener sClickListener;
@@ -54,8 +57,42 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         }
     }
 
+    Filter getNoteFilter() {
+        return noteFilter;
+    }
+
+    private Filter noteFilter = new Filter() {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Note> filteredNotes = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredNotes.addAll(mNotes);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Note note : mNotes) {
+                    if (note.getText().toLowerCase().contains(filterPattern)) {
+                        filteredNotes.add(note);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredNotes;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mNotes.clear();
+            mNotes.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
     private String formatDate(long longDate) {
-        return (String) DateFormat.format("hh:mm:ss dd.MM.yy", new Date(longDate));
+        return (String) DateFormat.format(DATE_PATTERN, new Date(longDate));
     }
 
     // At the top of the list are the most recently added notes.

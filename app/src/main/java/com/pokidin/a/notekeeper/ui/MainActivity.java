@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.pokidin.a.notekeeper.R;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_ID = "extra_data_id";
 
     private NoteViewModel mNoteViewModel;
-    private NoteListAdapter adapter;
+    private NoteListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +39,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView recyclerView = findViewById(R.id.rv_list);
-        adapter = new NoteListAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mNoteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-        mNoteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
-            @Override
-            public void onChanged(@Nullable List<Note> notes) {
-                // Update the cached copy of the notes in the adapter.
-                adapter.setNotes(notes);
-            }
-        });
-
-        adapter.setOnItemClickListener(new NoteListAdapter.ClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Note note = adapter.getNoteAtPosition(position);
-                launchUpdateNoteActivity(note);
-            }
-        });
+        setUpSearchView();
+        setUpRecyclerView();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +48,46 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteDetailsActivity.class);
                 startActivityForResult(intent, NOTE_ACTIVITY_DETAILS_REQUEST_CODE);
+            }
+        });
+    }
+
+    private void setUpRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.rv_list);
+        mAdapter = new NoteListAdapter(this);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mNoteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        mNoteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(@Nullable List<Note> notes) {
+                // Update the cached copy of the notes in the mAdapter.
+                mAdapter.setNotes(notes);
+            }
+        });
+
+        mAdapter.setOnItemClickListener(new NoteListAdapter.ClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Note note = mAdapter.getNoteAtPosition(position);
+                launchUpdateNoteActivity(note);
+            }
+        });
+    }
+
+    private void setUpSearchView() {
+        SearchView searchView = findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchText) {
+                mAdapter.getNoteFilter().filter(searchText);
+                return false;
             }
         });
     }
@@ -80,10 +102,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_by_create:
-                adapter.sortListByCreate();
+                mAdapter.sortListByCreate();
                 return true;
             case R.id.sort_by_update:
-                adapter.sortListByUpdate();
+                mAdapter.sortListByUpdate();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

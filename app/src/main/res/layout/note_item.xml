@@ -9,15 +9,13 @@
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="10/05/2019 10:12" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tv_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="100"
-        android:text="Bxjhdbrvdj jhbc bvc bhvj bxlv jhx vhxbv hkxbvhj, b hb jvhb bht b xbxh$$$$ bjhvb jhhvjhxv hxjv jhxb jhb jhbhj????? Bjhx bvhjb vjhbhb hjvb ,vbk wuiirueshxvxduhvuri vfxvhxdr e!!!!!" />
+        android:maxLength="100" />
 
     <View
         android:id="@+id/divider"
