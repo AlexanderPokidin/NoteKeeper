@@ -6,6 +6,9 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.Calendar;
+import java.util.Objects;
+
 @Entity(tableName = "note_table")
 public class Note {
 
@@ -17,18 +20,22 @@ public class Note {
     private String mText;
 
     @ColumnInfo(name = "date")
-    private String mDate;
+    private long mDate;
 
-    public Note(@NonNull String text, String date) {
+    public Note(@NonNull String text) {
         mText = text;
-        mDate = date;
+        mDate = getCurrentDate();
     }
 
     @Ignore
-    public Note(int id, @NonNull String text, String date) {
+    public Note(int id, @NonNull String text) {
         mId = id;
         mText = text;
-        mDate = date;
+        mDate = getCurrentDate();
+    }
+
+    private long getCurrentDate() {
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     public int getId() {
@@ -48,11 +55,31 @@ public class Note {
         mText = text;
     }
 
-    public String getDate() {
+    public long getDate() {
         return mDate;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         mDate = date;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Note)) {
+            return false;
+        }
+        Note note = (Note) obj;
+        return mId == note.getId()
+                && mDate == note.getDate()
+                && Objects.equals(mText, note.getText());
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mId, mText, mDate);
     }
 }

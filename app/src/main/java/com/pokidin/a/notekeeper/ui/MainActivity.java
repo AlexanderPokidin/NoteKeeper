@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_ID = "extra_data_id";
 
     private NoteViewModel mNoteViewModel;
+    private NoteListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = findViewById(R.id.rv_list);
-        final NoteListAdapter adapter = new NoteListAdapter(this);
+        adapter = new NoteListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -71,24 +72,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.sort_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sort) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.sort_by_create:
+                adapter.sortListByCreate();
+                return true;
+            case R.id.sort_by_update:
+                adapter.sortListByUpdate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -96,13 +95,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NOTE_ACTIVITY_DETAILS_REQUEST_CODE && resultCode == RESULT_OK) {
-            Note note = new Note(data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY), "030303");
+            Note note = new Note(data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY));
             mNoteViewModel.insertNote(note);
         } else if (requestCode == UPDATE_NOTE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             String noteText = data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY);
             int id = data.getIntExtra(NoteDetailsActivity.EXTRA_REPLY_ID, -1);
             if (id != -1) {
-                mNoteViewModel.updateNote(new Note(id, noteText, "040404"));
+                mNoteViewModel.updateNote(new Note(id, noteText));
             } else {
                 Toast.makeText(this, R.string.unable_to_update, Toast.LENGTH_SHORT).show();
             }
