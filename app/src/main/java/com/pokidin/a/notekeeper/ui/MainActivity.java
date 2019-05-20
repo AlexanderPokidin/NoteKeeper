@@ -19,7 +19,6 @@ import com.pokidin.a.notekeeper.R;
 import com.pokidin.a.notekeeper.entity.Note;
 import com.pokidin.a.notekeeper.viewmodel.NoteViewModel;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     private NoteViewModel mNoteViewModel;
     private NoteListAdapter adapter;
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView = findViewById(R.id.rv_list);
+        RecyclerView recyclerView = findViewById(R.id.rv_list);
         adapter = new NoteListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             String noteText = data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY);
             int id = data.getIntExtra(NoteDetailsActivity.EXTRA_REPLY_ID, -1);
             if (id != -1) {
-                mNoteViewModel.updateNote(new Note(id, noteText, Calendar.getInstance().getTimeInMillis()));
+                mNoteViewModel.updateNote(new Note(id, noteText));
             } else {
                 Toast.makeText(this, R.string.unable_to_update, Toast.LENGTH_SHORT).show();
             }

@@ -39,7 +39,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         if (mNotes != null) {
             Note current = mNotes.get(position);
             holder.textTv.setText(current.getText());
-            holder.dateTv.setText(formatDate(current.getCreateDate()));
+            holder.dateTv.setText(formatDate(current.getDate()));
         } else {
             holder.textTv.setText(R.string.no_word);
         }
@@ -74,7 +74,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         Collections.sort(mNotes, new Comparator<Note>() {
             @Override
             public int compare(Note n1, Note n2) {
-                return Long.compare(n2.getCreateDate(), n1.getCreateDate());
+                return Long.compare(n2.getDate(), n1.getDate());
             }
         });
         notifyDataSetChanged();

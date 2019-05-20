@@ -19,30 +19,19 @@ public class Note {
     @ColumnInfo(name = "note")
     private String mText;
 
-    @ColumnInfo(name = "create_date")
-    private long mCreateDate;
-
-    @ColumnInfo(name = "update_date")
-    private long mUpdateDate;
+    @ColumnInfo(name = "date")
+    private long mDate;
 
     public Note(@NonNull String text) {
         mText = text;
-        mCreateDate = getCurrentDate();
+        mDate = getCurrentDate();
     }
 
     @Ignore
     public Note(int id, @NonNull String text) {
         mId = id;
         mText = text;
-        mCreateDate = getCurrentDate();
-    }
-
-    @Ignore
-    public Note(int id, @NonNull String text, long updateDate) {
-        mId = id;
-        mText = text;
-        mCreateDate = getCurrentDate();
-        mUpdateDate = updateDate;
+        mDate = getCurrentDate();
     }
 
     private long getCurrentDate() {
@@ -66,20 +55,12 @@ public class Note {
         mText = text;
     }
 
-    public long getCreateDate() {
-        return mCreateDate;
+    public long getDate() {
+        return mDate;
     }
 
-    public void setCreateDate(long createDate) {
-        mCreateDate = createDate;
-    }
-
-    public long getUpdateDate() {
-        return mUpdateDate;
-    }
-
-    public void setUpdateDate(long updateDate) {
-        mUpdateDate = updateDate;
+    public void setDate(long date) {
+        mDate = date;
     }
 
     @Override
@@ -92,14 +73,13 @@ public class Note {
         }
         Note note = (Note) obj;
         return mId == note.getId()
-                && mCreateDate == note.getCreateDate()
-                && mUpdateDate == note.getUpdateDate()
+                && mDate == note.getDate()
                 && Objects.equals(mText, note.getText());
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mId, mText, mCreateDate, mUpdateDate);
+        return Objects.hash(mId, mText, mDate);
     }
 }
