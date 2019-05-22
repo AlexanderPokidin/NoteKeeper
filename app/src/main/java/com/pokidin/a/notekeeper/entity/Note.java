@@ -51,10 +51,6 @@ public class Note {
         return mText;
     }
 
-    public void setText(@NonNull String text) {
-        mText = text;
-    }
-
     public long getDate() {
         return mDate;
     }

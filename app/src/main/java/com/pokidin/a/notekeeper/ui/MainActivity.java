@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         mNoteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
             @Override
             public void onChanged(@Nullable List<Note> notes) {
-                // Update the cached copy of the notes in the mAdapter.
                 mAdapter.setNotes(notes);
             }
         });
