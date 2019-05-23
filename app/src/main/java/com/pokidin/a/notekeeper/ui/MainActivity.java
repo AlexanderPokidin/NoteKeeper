@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // When a user enters text in NoteDetailsActivity, the result of this action is returned.
+        // This Activity saves data in the database.
         if (requestCode == NOTE_ACTIVITY_DETAILS_REQUEST_CODE && resultCode == RESULT_OK) {
             Note note = new Note(data.getStringExtra(NoteDetailsActivity.EXTRA_REPLY));
             mNoteViewModel.insertNote(note);
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.unable_to_update, Toast.LENGTH_SHORT).show();
             }
+            // When NoteDetailsActivity returns a user`s resultCode, this Activity deletes the note.
         } else if (requestCode == UPDATE_NOTE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_FIRST_USER) {
             int id = data.getIntExtra(NoteDetailsActivity.EXTRA_REPLY_ID, -1);
             if (id != -1) {

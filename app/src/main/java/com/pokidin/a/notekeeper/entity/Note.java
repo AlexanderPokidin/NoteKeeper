@@ -22,11 +22,13 @@ public class Note {
     @ColumnInfo(name = "date")
     private long mDate;
 
+    // This constructor adds a new note to the database.
     public Note(@NonNull String text) {
         mText = text;
         mDate = getCurrentDate();
     }
 
+    // This constructor is used to update the selected note.
     @Ignore
     public Note(int id, @NonNull String text) {
         mId = id;

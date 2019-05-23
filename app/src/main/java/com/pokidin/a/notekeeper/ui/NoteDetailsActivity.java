@@ -26,6 +26,10 @@ public class NoteDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_details);
 
+        init();
+    }
+
+    private void init() {
         mEditText = findViewById(R.id.et_text);
         extras = getIntent().getExtras();
         if (extras != null) {
@@ -52,6 +56,9 @@ public class NoteDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    // If the user has entered data, then returns it to the calling Activity
+    // (in this case, MainActivity).
+    // Called by pressing the Back or Save button.
     private void setExtraReply() {
         Intent replyIntent = new Intent();
         if (TextUtils.isEmpty(mEditText.getText())) {
@@ -91,6 +98,8 @@ public class NoteDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // To delete a current note, returns ID to the calling Activity (in this case, MainActivity).
+    // Called by pressing the Delete button.
     private void setExtraReplyForRemove() {
         Intent replyIntent = new Intent();
         if (TextUtils.isEmpty(mEditText.getText())) {
