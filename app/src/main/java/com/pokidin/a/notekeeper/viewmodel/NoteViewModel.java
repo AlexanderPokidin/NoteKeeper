@@ -3,7 +3,6 @@ package com.pokidin.a.notekeeper.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 
 import com.pokidin.a.notekeeper.entity.Note;
@@ -14,8 +13,7 @@ import java.util.List;
 public class NoteViewModel extends AndroidViewModel {
 
     private NoteRepository mNoteRepository;
-//    private LiveData<List<Note>> mAllNotes;
-    private LiveData<PagedList<Note>> mAllNotes;
+    private LiveData<List<Note>> mAllNotes;
 
     public NoteViewModel(@NonNull Application application) {
         super(application);
@@ -23,11 +21,7 @@ public class NoteViewModel extends AndroidViewModel {
         mAllNotes = mNoteRepository.getAllNotes();
     }
 
-//    public LiveData<List<Note>> getAllNotes() {
-//        return mAllNotes;
-//    }
-
-    public LiveData<PagedList<Note>> getAllNotes() {
+    public LiveData<List<Note>> getAllNotes() {
         return mAllNotes;
     }
 

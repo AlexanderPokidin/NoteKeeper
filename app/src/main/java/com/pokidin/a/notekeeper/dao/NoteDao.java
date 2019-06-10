@@ -1,7 +1,6 @@
 package com.pokidin.a.notekeeper.dao;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -29,7 +28,4 @@ public interface NoteDao {
 
     @Query("SELECT * FROM note_table ORDER BY mId DESC")
     LiveData<List<Note>> getAllNotes();
-
-    @Query("SELECT * FROM note_table ORDER BY mId DESC")
-    DataSource.Factory<Integer, Note> getAllNotesForPaging();
 }

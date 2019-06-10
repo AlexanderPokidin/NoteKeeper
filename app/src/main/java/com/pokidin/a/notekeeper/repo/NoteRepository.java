@@ -2,8 +2,6 @@ package com.pokidin.a.notekeeper.repo;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.arch.paging.LivePagedListBuilder;
-import android.arch.paging.PagedList;
 import android.os.AsyncTask;
 
 import com.pokidin.a.notekeeper.dao.NoteDao;
@@ -14,30 +12,17 @@ import java.util.List;
 
 public class NoteRepository {
     private NoteDao mNoteDao;
-    //    private LiveData<List<Note>> mAllNotes;
-    private LiveData<PagedList<Note>> mAllNotes;
+    private LiveData<List<Note>> mAllNotes;
 
     public NoteRepository(Application application) {
         NoteRoomDatabase database = NoteRoomDatabase.getInstance(application);
         mNoteDao = database.getNoteDao();
-        mAllNotes = new LivePagedListBuilder<>(mNoteDao.getAllNotesForPaging(), 20)
-//                new PagedList.Config.Builder()
-//                        .setPageSize(20)
-//                        .setPrefetchDistance(20)
-//                        .setEnablePlaceholders(true)
-//                        .build())
-//                .setInitialLoadKey(0)
-                .build();
-//        mAllNotes = mNoteDao.getAllNotes();
+        mAllNotes = mNoteDao.getAllNotes();
     }
 
-    public LiveData<PagedList<Note>> getAllNotes() {
+    public LiveData<List<Note>> getAllNotes() {
         return mAllNotes;
     }
-
-//    public LiveData<List<Note>> getAllNotes() {
-//        return mAllNotes;
-//    }
 
     public void insert(Note note) {
         new InsertNoteAsyncTask(mNoteDao).execute(note);
